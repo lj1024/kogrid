@@ -1,0 +1,77 @@
+.koSelected{
+	background-color:#D8D8D8;
+}
+.koSort{
+	color:white;
+}
+.kotoolbar{
+  width: 100%;
+  max-width: 100%;
+  background-color:#0b67cd;
+  padding:15px;
+  color:white;
+}
+.kotoolbar button{
+	float:right;
+}
+div.kopagination>span{
+	position: relative;
+    float: left;
+    padding: 6px 5px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 0px solid #ddd;
+}
+.kotable>thead>tr>th.koTotalCheck{
+	width:50px;
+	text-align:center;
+}
+/* 主表格标题样式 */
+.kotable>thead>tr>th{
+	background-color:#2d89ef;
+	cursor:pointer;
+	border: 0px solid #2d89ef;
+	text-align:center;	
+}
+
+/* 主表格内容样式 */
+.kotable>tbody>tr>td{
+	text-align:left;
+}
+.kotable>tbody>tr>td.koCheck{
+	width:50px;
+	text-align:center;
+}
+
+/* 子表格标题样式 */
+.kotable>thead>tr>td>table>thead>tr>th{
+	background-color:#009ACD;
+	cursor:pointer;
+	border: 0px solid white;
+	text-align:center;
+}
+/* 子表格内容样式 */
+.kotable>thead>tr>td>table>tbody>tr>td{
+	text-align:left;
+}
+
+
+.kotable th>span span{
+	display:block;
+}
+.kotable th>span:first-child{
+	color:white;
+}
+.kotable th>span:first-child+span{
+	display:block;
+	float:right;
+	
+}
+.kotable th>span>span:first-child{
+margin-bottom:-5px;
+}
+
+
