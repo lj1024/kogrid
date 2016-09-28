@@ -2,8 +2,23 @@
 knockout jquery  table plugin (ko表格插件)
 # 插件介绍
 此插件是一个动态生成表格插件，插件依赖boostrap3,jquery,knockout(简称：ko)
-#生成的表格
-![生成的表格](https://github.com/lj1024/kogrid/blob/master/%E7%A4%BA%E4%BE%8B.png)
+#包含功能  
+* ajax加载数据
+* 手动加载数据
+* 获取选中行数据
+* 获取所有行数据
+* 删除所有行数据
+* 选择性添加复选框
+* 选择性添加分页
+* 选择性添加排序(支持多列,按照前后顺序排序)
+* 添加子表格  
+ 
+#生成的表格样式
+基本的表格样式  
+![生成的表格](https://github.com/lj1024/kogrid/blob/master/%E7%A4%BA%E4%BE%8B.png)  
+
+带子表格的表格样式  
+![带子表格的表格](https://github.com/lj1024/kogrid/blob/master/%E5%B8%A6%E5%AD%90%E8%A1%A8%E6%A0%BC%E7%A4%BA%E4%BE%8B.png)
 #使用方法
 ##1.引入js和css文件
 `<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">`  
@@ -19,8 +34,25 @@ knockout jquery  table plugin (ko表格插件)
 首先需要一个承载容器，这里我用一个div  
 `<div id="test" class="container table-responsive"></div>`  
 然后调用：  
-`$('#test').kogrid( {`  
-		`//是否添加复选框`  
+`$('#test').kogrid( {`    
+                `toolbar:{//添加工具栏 `   
+			 `'title':'用户表',//工具栏标题`    
+			 `'items':[//工具栏包含的工具`    
+			        `{`
+			        `html:"<span class='glyphicon glyphicon-download-alt' aria-hidden='true'></span>Star",`  
+			        `click:function(){`  
+			             `console.log($('#test').kogrid('getRows'));`  
+			              `}`  
+			        `},`  
+			        `{`  
+			        `html:"<span class='glyphicon glyphicon-star' aria-hidden='true'></span> Star",`  
+			        `click:function(data,event){`  
+			        	`console.log($('#test').kogrid('getSelectRow'));`  
+			            `}`  
+			        `}`  
+			        `]`  
+		 `},`  
+		`//是否添加复选框`    
 		`checkBox:true,`  
 		`//是否分页`  
 		`paging:true,`  
@@ -48,12 +80,33 @@ knockout jquery  table plugin (ko表格插件)
 			`field : 'password',`  
 		`}, {`  
 			`title : '操作',`  
-			`display : function(data, ele) {//使用此方法可以自定义列显示内容,data为当前行数据,ele为当前td标签`  
-				`var $div=$("<span>"+data.username+data.password+"</span>");`   
-				`return $div;`  
-			`}`  
-		`} ]`  
-	`}); `  
+			`display : function(data, ele) {//使用此方法可以自定义列显示内容或者添加子表格,data为当前行数据,ele为当前td标签`  
+			`var $div=$("<span></span>");`  
+			`var $a = $("<a href='javascript:void(0)'>子表格</a>");`  
+			`$a.click(function(){`  
+				`//初始化子表格`  
+				`$('#test').kogrid('childGrid',ele,{`  
+						 `paging:false,`  
+						`'ajax':{`  
+							`url:'<s:url value='/'/>'+'customerad/koTestData',`  
+							`type:'post',`  
+						`},`  
+						`'columns' : [ {`  
+							`title : '姓名',`  
+							`column : 'user_name',`  
+							`field : 'username',`  
+							`sort:true,`  
+						`}, {`  
+							`title : '密码',`  
+							`column : 'pass_word',`  
+							`field : 'password',`  
+							`sort:true,`  
+						`}]`  
+					`});`  
+					`//子表格加载数据`  
+					`$('#test').kogrid('childLoad',ele,{'name':'lisi'});`  
+		`} ]`    
+	`}); `    
   这样就初始化出来表格  
 ##3.加载数据  
   ` $('#test').kogrid('load');`  
@@ -71,4 +124,3 @@ knockout jquery  table plugin (ko表格插件)
   "records":[{"username":"1","password":"1","address":null,"rememberme":null,"sex":null},...],//当前页显示数据  
   "message":"成功"//提示信息，请求失败的时候用于提示  
   }  
-
