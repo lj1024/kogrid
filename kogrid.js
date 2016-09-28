@@ -350,10 +350,10 @@
 			var $kotable = $(this);
 			// 表格添加工具条
 			if (opts['toolbar']) {
-				$kotable.append("<div class='kotoolbar'><span data-bind='text:toolbar().title()'></span>"
-								+ "<!-- ko  foreach: toolbar().items -->"
-								+ "<button type='button' class='btn btn-sm btn-default' data-bind='click:$data.click,html:$data.html'>"
-								+ "</button>" + "<!-- /ko -->" + "</div>");
+				$kotable.append("<div class='kotoolbar'><div data-bind='text:toolbar().title()'></div>"
+								+ "<div class='rightbar'><!-- ko  foreach: toolbar().items -->"
+								+ "<span  data-bind='click:$data.click,html:$data.html'>"
+								+ "</span>" + "<!-- /ko --></div>" + "</div>");
 
 			}
 			// 表格添加表头
@@ -403,8 +403,8 @@
 			$kotable.append("<div data-bind='visible: paging() && records().length > 0' class='row page' >"
 							+ "<div class='col-xs-7'> "
 							+ "<ul class='kopagination pagination' >"
-							+ "<li data-bind='click:firstPage'><a href='javascript:void(0)' aria-label='Previous'><span aria-hidden='true'>首页</span></a></li>"
-							+ "<li data-bind='click:previousPage,css:{disabled:selectPage() == 1}'><a href='javascript:void(0)' aria-label='Previous'><span aria-hidden='true'>上一页</span></a></li>"
+							+ "<li data-bind='click:firstPage'><a href='javascript:void(0)' aria-label='Previous'><span aria-hidden='true'><<</span></a></li>"
+							+ "<li data-bind='click:previousPage,css:{disabled:selectPage() == 1}'><a href='javascript:void(0)' aria-label='Previous'><span aria-hidden='true'><</span></a></li>"
 							+ "<!-- ko if: showStartPagerDots -->"
 							+ "<li><a href='javascript:void(0)' data-bind='event:{click:startPagerDotsClick}'> ... </a></li>"
 							+ "<!-- /ko -->"
@@ -414,8 +414,8 @@
 							+ "<!-- ko if: showEndPagerDots -->"
 							+ "<li><a href='javascript:void(0)' data-bind='event:{click:endPagerDotsClick}'> ... </a></li>"
 							+ "<!-- /ko -->"
-							+ "<li data-bind='click:nextPage,css:{disabled:selectPage() == totalPages().length}'><a href='javascript:void(0)' aria-label='Next'><span aria-hidden='true'>下一页</span></a></li>"
-							+ "<li data-bind='click:lastPage'><a href='javascript:void(0)' aria-label='Previous'><span aria-hidden='true'>尾页</span></a></li>"
+							+ "<li data-bind='click:nextPage,css:{disabled:selectPage() == totalPages().length}'><a href='javascript:void(0)' aria-label='Next'><span aria-hidden='true'>></span></a></li>"
+							+ "<li data-bind='click:lastPage'><a href='javascript:void(0)' aria-label='Previous'><span aria-hidden='true'>>></span></a></li>"
 							+ "</ul></div>"
 							+ "<div class='col-xs-5 pull-right'>  "
 							+ "<div class='kopagination pagination'><span>跳转到<select data-bind='options:totalPages(),optionsText:$data,optionsValue:$data,value:selectPage,event:{change:gotoPage}'>      </select></span> <span>每页<select data-bind='options:listNums,optionsText:$data,optionsValue:$data,value:listNum,event:{change:changeListNum}'>            </select></span> "
@@ -442,6 +442,7 @@
 			// ko绑定
 			ko.applyBindings(viewModel, $kotable[0]);
 			$kotable.data('viewModel', viewModel);
+			return true;
 
 		},
 		// 表格ajax加载数据
@@ -452,6 +453,7 @@
 			}
 			viewModel.selectPage(1);
 			viewModel.postData();
+			return true;
 		},
 		// 手动加载数据
 		'data' : function(records) {
@@ -462,7 +464,9 @@
 			if (records && records.length > 0) {
 				viewModel.records(records);
 			}
+			return true;
 		},
+		//重新加载当前页
 		'reload' : function() {
 			var viewModel = $(this).data('viewModel');
 			var totalPages = viewModel.totalPages();
@@ -471,15 +475,20 @@
 				viewModel.selectPage(lastPage);
 			}
 			viewModel.postData();
+			return true;
 		},
+		//获取当前页数据
 		'getRows' : function() {
 			var viewModel = $(this).data('viewModel');
 			return viewModel.records() || [];
 		},
+		//删除当前页数据
 		'delRows' : function() {
 			var viewModel = $(this).data('viewModel');
 			viewModel.records.removeAll();
+			return true;
 		},
+		//获取选中行数据
 		'getSelectRow' : function() {
 			var viewModel = $(this).data('viewModel');
 			var selectIndex = viewModel.selectIndexs();
@@ -495,7 +504,60 @@
 					return rows;
 				}
 			}
+		},
+		'childGrid':function(ele,options) {
+			var $tr = $(ele).closest('tr');
+			if($tr.next(".childGrid")[0]){
+				var childGrid = $tr.data('childGrid');
+                if(childGrid === $tr.next(".childGrid")[0]) {
+                	$tr.next(".childGrid").fadeToggle('slow', function() {
+    					$(this).remove();
+    				});
+    				return $tr.removeData('childGrid');
+                } else {
+                	$tr.removeData('childGrid');
+    				$tr.next(".childGrid").remove();
+    				$td = $("<td colspan ='100'></td>");
+    				$td.kogrid(options);
+    				var $innerTr = $("<tr class='childGrid'></tr>");
+    				$innerTr.append($td);
+    				$innerTr.fadeToggle('slow');
+    				$tr.data('childGrid', $innerTr[0]);
+    				return $tr.after($innerTr);
+                }
+				
+			} else {
+				$tr.removeData('childGrid');
+				$td = $("<td colspan ='100'></td>");
+				$td.kogrid(options);
+				var $innerTr = $("<tr class='childGrid'></tr>");
+				$innerTr.append($td);
+				$innerTr.fadeToggle('slow');
+				$tr.data('childGrid', $innerTr[0]);
+				return $tr.after($innerTr);
+			}
+
+		},
+		'childLoad':function(ele,queryParams){
+			$(ele).closest('tr').next(".childGrid").children('td').kogrid('load',queryParams);
+		},
+		'childReload':function(ele){
+			$(ele).closest('tr').next(".childGrid").children('td').kogrid('reload');
+		},
+		'childGetSelectRow':function(ele){
+			$(ele).closest('tr').next(".childGrid").children('td').kogrid('getSelectRow');
+		},
+		'childGetRows':function(ele){
+			$(ele).closest('tr').next(".childGrid").children('td').kogrid('getRows');
+		},
+		'childDelRows':function(ele){
+			$(ele).closest('tr').next(".childGrid").children('td').kogrid('delRows');
+		},
+		'childData':function(ele,records){
+			$(ele).closest('tr').next(".childGrid").children('td').kogrid('data',records);
 		}
+		
+		
 
 	};
 	// 主表格
@@ -524,27 +586,4 @@
 		checkBox : false,
 		paging : true,
 	};
-	// 子表格
-	$.fn.kosubgrid = function(options) {
-		var $tr = $(this).closest('tr');
-		var subTable = $tr.data('subTable');
-		if (subTable === $(this)[0]) {
-			$tr.next(".subTable").fadeToggle('slow', function() {
-				$(this).remove();
-			});
-			return $tr.removeData('subTable');
-		} else {
-			$tr.removeData('subTable');
-			$tr.next(".subTable").remove();
-			$tr.data('subTable', $(this)[0]);
-			$td = $("<td colspan ='100'></td>");
-			$td.kogrid(options);
-			$td.kogrid('load');
-			var $innerTr = $("<tr class='subTable'></tr>");
-			$innerTr.append($td);
-			$innerTr.fadeToggle('slow');
-			return $tr.after($innerTr);
-		}
-	};
-
 })(jQuery, window, document);

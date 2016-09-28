@@ -8,11 +8,21 @@
   width: 100%;
   max-width: 100%;
   background-color:#0b67cd;
-  padding:15px;
+  padding:10px;
   color:white;
+  position: relative;
 }
-.kotoolbar button{
-	float:right;
+.kotoolbar div {
+	display: inline-block;
+}
+.kotoolbar div.rightbar{
+	right:5px;
+	position: absolute;
+}
+.kotoolbar div.rightbar span{
+	display:inline-block;
+	margin:2px;
+	cursor:pointer;
 }
 div.kopagination>span{
 	position: relative;
@@ -57,21 +67,25 @@ div.kopagination>span{
 .kotable>thead>tr>td>table>tbody>tr>td{
 	text-align:left;
 }
-
-
-.kotable th>span span{
+Table.kotable{
+	margin:0px;
+	border:0px solid white;
+}
+Table.kotable th>span span{
 	display:block;
 }
-.kotable th>span:first-child{
+Table.kotable th>span:first-child{
 	color:white;
 }
-.kotable th>span:first-child+span{
+Table.kotable th>span:first-child+span{
 	display:block;
 	float:right;
 	
 }
-.kotable th>span>span:first-child{
+Table.kotable th>span>span:first-child{
 margin-bottom:-5px;
 }
-
+Table.kotable>tbody>tr.childGrid>td{
+	padding:2px;
+}
 
