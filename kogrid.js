@@ -127,9 +127,11 @@
 				self.showEndPagerDots(true);
 			}
 			//不足pagerCount页,重新设置start值
-			if(end - start < 6) {
+			if(end - start < (pagerCount - 1)) {
 				start = end - 6;
 			}
+			//start为负值的时候,设置为1
+			start = start >= 1 ? start : 1;
 			for (var i = start; i <= end; i++) {
 				result.push(i);
 			}
