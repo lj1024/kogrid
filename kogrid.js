@@ -187,10 +187,10 @@
 				ajaxOption['success'] = function(data) {
 					if (data.result == 'OK') {
 						if (self.paging()) {
-							self.records(data.records);
-							self.totalCount(data.totalCount);
+							self.records(data.records||[]);
+							self.totalCount(data.totalCount||1);
 						} else {
-							self.records(data.records);
+							self.records(data.records||[]);
 						}
 					} else {
 						alert(data.message);

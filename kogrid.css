@@ -48,24 +48,15 @@ div.kopagination>span{
 }
 
 /* 主表格内容样式 */
-.kotable>tbody>tr>td{
+Table.kotable>tbody>tr>td{
 	text-align:left;
 }
+/* Table.kotable>tbody>tr>td:hover{
+	background-color:#fcf8e3
+} */
 .kotable>tbody>tr>td.koCheck{
 	width:50px;
 	text-align:center;
-}
-
-/* 子表格标题样式 */
-.kotable>thead>tr>td>table>thead>tr>th{
-	background-color:#009ACD;
-	cursor:pointer;
-	border: 0px solid white;
-	text-align:center;
-}
-/* 子表格内容样式 */
-.kotable>thead>tr>td>table>tbody>tr>td{
-	text-align:left;
 }
 Table.kotable{
 	margin:0px;
