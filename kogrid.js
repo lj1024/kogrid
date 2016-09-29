@@ -156,7 +156,7 @@
 
 				var $container = self.container();
 				// 清除原有子表格
-				$container.find(".subTable").each(function() {
+				$container.find(".childGrid").each(function() {
 					$(this).remove();
 				});
 				self.selectIndexs.removeAll();
@@ -445,6 +445,10 @@
 			return true;
 
 		},
+		'destroy':function(){
+			$(this).removeData('viewModel');
+			$(this).children().remove();
+		},
 		// 表格ajax加载数据
 		'load' : function(queryParams) {
 			var viewModel = $(this).data('viewModel');
@@ -495,7 +499,7 @@
 			var records = viewModel.records();
 			if (selectIndex.length > 0) {
 				if (viewModel.singleSelect()) {
-					return records[selectIndex[0]] || {};
+					return records[selectIndex[0]] || null;
 				} else {
 					var rows = new Array();
 					for (var i = 0; i < selectIndex.length; i++) {
@@ -504,6 +508,7 @@
 					return rows;
 				}
 			}
+			return null;
 		},
 		'childGrid':function(ele,options) {
 			var $tr = $(ele).closest('tr');
@@ -539,22 +544,22 @@
 
 		},
 		'childLoad':function(ele,queryParams){
-			$(ele).closest('tr').next(".childGrid").children('td').kogrid('load',queryParams);
+			return $(ele).closest('tr').next(".childGrid").children('td').kogrid('load',queryParams);
 		},
 		'childReload':function(ele){
-			$(ele).closest('tr').next(".childGrid").children('td').kogrid('reload');
+			return $(ele).closest('tr').next(".childGrid").children('td').kogrid('reload');
 		},
 		'childGetSelectRow':function(ele){
-			$(ele).closest('tr').next(".childGrid").children('td').kogrid('getSelectRow');
+			return $(ele).closest('tr').next(".childGrid").children('td').kogrid('getSelectRow');
 		},
 		'childGetRows':function(ele){
-			$(ele).closest('tr').next(".childGrid").children('td').kogrid('getRows');
+			return $(ele).closest('tr').next(".childGrid").children('td').kogrid('getRows');
 		},
 		'childDelRows':function(ele){
-			$(ele).closest('tr').next(".childGrid").children('td').kogrid('delRows');
+			return $(ele).closest('tr').next(".childGrid").children('td').kogrid('delRows');
 		},
 		'childData':function(ele,records){
-			$(ele).closest('tr').next(".childGrid").children('td').kogrid('data',records);
+			return $(ele).closest('tr').next(".childGrid").children('td').kogrid('data',records);
 		}
 		
 		
