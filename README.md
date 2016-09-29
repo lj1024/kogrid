@@ -73,6 +73,7 @@ knockout jquery  table plugin (ko表格插件)
 			`title : '姓名',//要显示的列名`  
 			`column : 'user_name',//数据库中的列名`  
 			`field : 'username',//返回数据的属性名`  
+                        `style :{'width':5%},//控制样式`   
 			`sort:true//是否可排序`  
 			`}, {`  
 			`title : '密码',`  
@@ -118,9 +119,24 @@ knockout jquery  table plugin (ko表格插件)
    `$('#test').kogrid('getSelectRow');`  
 ##6.获取当前页所有数据  
   ` $('#test').kogrid('getRows');`  
-##7.最后强调下ajax返回的数据格式：  
+##7.ajax返回的数据格式，只有此格式才能被正常解析  
   {"result":"OK",//是否请求成功  
   "totalCount":1000,//数据总数  
   "records":[{"username":"1","password":"1","address":null,"rememberme":null,"sex":null},...],//当前页显示数据  
   "message":"成功"//提示信息，请求失败的时候用于提示  
   }  
+##8.子表格初始化  
+   ` $('#test').kogrid('childGrid',ele,{options});`  
+   ele是当前td标签，请参考列子当中的display方法   
+##9.子表格加载数据
+   ` $('#test').kogrid('childLoad',ele,{请求参数});`  
+##10.子表格刷新数据
+   ` $('#test').kogrid('childReload',ele);`  
+##11.子表格获取选中行数据
+   ` $('#test').kogrid('childGetSelectRow',ele);`    
+##12.子表格获取所有行数据
+   ` $('#test').kogrid('childGetRows',ele);`  
+##13.子表格删除所有行数据
+   ` $('#test').kogrid('childDelRows',ele);`     
+##14.子表格手动加载数据
+   ` $('#test').kogrid('childData',ele,{records});`   
