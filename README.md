@@ -1,7 +1,8 @@
 # kogrid
 knockout jquery  table plugin (ko表格插件)
 # 插件介绍
-此插件是一个动态生成表格插件，插件依赖boostrap3,jquery,knockout(简称：ko)
+此插件是一个动态生成表格插件，插件依赖boostrap3,jquery,knockout(简称：ko)  
+有任何问题，请发送邮件到luwenjiehe@126.com
 #包含功能  
 * ajax加载数据
 * 手动加载数据
